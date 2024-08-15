@@ -8,6 +8,9 @@ export interface CelebrityProps {
   imageUrl: string;
   age: number;
   profile_path?: string;
+  place_of_birth: string;
+  birthday: string;
+  biography: string;
 }
 
 export interface CelebrityStore {

@@ -4,6 +4,7 @@ import { fetchCelebrityDetails } from '../services/celebrityService';
 import { useEffect, useState } from 'react';
 import { getAge } from '../utils/calculateAge';
 import { CelebrityProps } from '../store/celebrityStore';
+import { useNavigate } from 'react-router-dom';
 
 const CelebrityAge = styled.span`
   color: ${(props) => props.theme.colors.textSecondary};
@@ -14,12 +15,13 @@ const CelebrityAge = styled.span`
 
 export const CelebrityCard: React.FC<CelebrityProps> = (celebrity) => {
   const [age, setAge] = useState<number>(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
         const details = await fetchCelebrityDetails(+celebrity.id);
-        const calculateAge = getAge(details.biography);
+        const calculateAge = getAge(details.birthday);
         setAge(calculateAge);
       } catch (error) {
         console.error('Erro ao buscar detalhes da celebridade', error);
@@ -30,7 +32,10 @@ export const CelebrityCard: React.FC<CelebrityProps> = (celebrity) => {
   }, [celebrity.id]);
 
   return (
-    <Card className="celebrity">
+    <Card
+      className="celebrity"
+      onClick={() => navigate(`/celebrity/${celebrity.id}`)}
+    >
       <MovieImage
         src={`https://image.tmdb.org/t/p/w500/${celebrity.profile_path}`}
         alt={celebrity.name}

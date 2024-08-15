@@ -1,20 +1,24 @@
-import { parse, differenceInYears } from 'date-fns';
+import { differenceInYears, parseISO, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-function extractBirthDate(text: string) {
-  const regex = /\d{1,2} de [a-z]+ de \d{4}/i;
-  const match = text.match(regex);
-  return match ? match[0] : null;
-}
-
 export const getAge = (text: string): number => {
-  const birthDateStr = extractBirthDate(text);
-
-  const birthDate = birthDateStr
-    ? parse(birthDateStr, "d 'de' MMMM 'de' yyyy", new Date(), { locale: ptBR })
-    : null;
-
-  const age = birthDate ? differenceInYears(new Date(), birthDate) : 0;
+  const age = text ? differenceInYears(new Date(), text) : 0;
 
   return age;
+};
+
+export const coverteDate = (text: string): string => {
+  if (!text) return 'N/A';
+  const parsedDate = parseISO(text);
+  return format(parsedDate, "dd 'de' MMMM 'de' yyyy", {
+    locale: ptBR,
+  });
+};
+
+export const convertYear = (text: string): string => {
+  if (!text) return 'N/A';
+  const parsedDate = parseISO(text);
+  return format(parsedDate, 'yyyy', {
+    locale: ptBR,
+  });
 };
