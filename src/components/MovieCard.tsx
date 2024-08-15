@@ -1,4 +1,8 @@
 import styled from 'styled-components';
+import { Movie } from '../store/movieStore';
+
+const defaultPoster =
+  'https://via.placeholder.com/500x750.png?text=No+Image+Available';
 
 export const Card = styled.div`
   background-color: ${(props) => props.theme.colors.cardBackground};
@@ -8,7 +12,6 @@ export const Card = styled.div`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 100%;
-  border-radius: 12px;
 `;
 
 export const MovieImage = styled.img`
@@ -28,13 +31,13 @@ export const MovieInfo = styled.div`
   color: ${(props) => props.theme.colors.text};
 `;
 
-interface MovieTitleProps {
+export interface MovieTitleProps {
   hasOverview?: boolean;
 }
 
 export const MovieTitle = styled.h3<MovieTitleProps>`
   margin: 0;
-  font-size: ${(props) => (props.hasOverview ? '1rem' : '0.75rem')};
+  font-size: 1rem;
   color: ${(props) => props.theme.colors.text};
   overflow: hidden;
   text-overflow: ellipsis;
@@ -52,7 +55,7 @@ export const MovieOverview = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  max-width: 550px;
+  max-width: 100%;
 `;
 
 export const MovieScore = styled.div`
@@ -92,28 +95,21 @@ export const WatchTrailerButton = styled.button`
   }
 `;
 
-export interface MovieCardProps {
-  id?: number;
-  title: string;
-  overview?: string;
-  imageUrl: string;
-  score: number;
-}
-
-export const MovieCard: React.FC<MovieCardProps> = ({
-  title,
-  imageUrl,
-  overview,
-  score,
-}) => (
-  <Card>
-    <MovieImage src={imageUrl} alt={title} />
+export const MovieCard: React.FC<Movie> = (movie) => (
+  <Card className="movie">
+    <MovieImage
+      src={
+        movie.poster_path
+          ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+          : defaultPoster
+      }
+      alt={movie.title}
+    />
     <MovieScore>
-      <StarIcon>⭐</StarIcon> {score.toFixed(1)}
+      <StarIcon>⭐</StarIcon> {movie.vote_average?.toFixed(1) || 0}
     </MovieScore>
     <MovieInfo>
-      <MovieTitle hasOverview={!!overview}>{title}</MovieTitle>
-      {overview && <MovieOverview>{overview}</MovieOverview>}
+      <MovieTitle>{movie.title}</MovieTitle>
       <WatchTrailerButton>Assistir ao trailer ▶</WatchTrailerButton>
     </MovieInfo>
   </Card>

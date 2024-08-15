@@ -1,14 +1,15 @@
 import create from 'zustand';
 import { fetchPopularCelebrities } from '../services/celebrityService';
 
-interface CelebrityProps {
+export interface CelebrityProps {
   id: string;
   name: string;
   imageUrl: string;
   age: number;
+  profile_path?: string;
 }
 
-interface CelebrityStore {
+export interface CelebrityStore {
   celebrities: CelebrityProps[];
   fetchCelebrities: () => Promise<void>;
   getCelebrityById: (id: string) => CelebrityProps | undefined;

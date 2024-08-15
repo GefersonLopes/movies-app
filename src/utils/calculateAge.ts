@@ -15,7 +15,6 @@ export const getAge = (text: string): number => {
     : null;
 
   const age = birthDate ? differenceInYears(new Date(), birthDate) : 0;
-  console.log(!birthDate && birthDateStr);
 
   return age;
 };

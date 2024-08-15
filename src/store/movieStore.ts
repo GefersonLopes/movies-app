@@ -4,18 +4,19 @@ import {
   fetchTopRatedMovies,
   fetchUpcomingMovies,
 } from '../services/movieService';
+import { MovieDetails } from '../components/MoviePrincipalCard';
 
-interface Movie {
+export interface Movie {
   id: number;
   title: string;
   poster_path: string;
   vote_average: number;
   genres?: Array<{ id: number; name: string }>;
-  overview: string;
+  overview?: string;
 }
 
 interface MovieStore {
-  principalMovie: Movie;
+  principalMovie: MovieDetails;
   popularMovies: Movie[];
   upComingMovies: Movie[];
   topRatedMovies: Movie[];
@@ -25,7 +26,7 @@ interface MovieStore {
 
 export const useMovieStore = create<MovieStore>((set, get) => ({
   popularMovies: [],
-  principalMovie: {} as Movie,
+  principalMovie: {} as MovieDetails,
   upComingMovies: [],
   topRatedMovies: [],
   fetchMovies: async () => {

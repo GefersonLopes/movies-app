@@ -45,7 +45,7 @@ export const fetchTopRatedMovies = async () => {
   }
 };
 
-export const fetchMovieDetails = async (movieId: string) => {
+export const fetchMovieDetails = async (movieId: number) => {
   try {
     const response = await api.get(`/movie/${movieId}`, {
       params: {

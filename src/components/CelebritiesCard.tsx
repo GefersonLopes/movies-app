@@ -3,12 +3,7 @@ import { Card, MovieImage, MovieInfo, MovieTitle } from './MovieCard';
 import { fetchCelebrityDetails } from '../services/celebrityService';
 import { useEffect, useState } from 'react';
 import { getAge } from '../utils/calculateAge';
-
-export interface CelebrityCardProps {
-  id: number;
-  name: string;
-  imageUrl: string;
-}
+import { CelebrityProps } from '../store/celebrityStore';
 
 const CelebrityAge = styled.span`
   color: ${(props) => props.theme.colors.textSecondary};
@@ -17,33 +12,32 @@ const CelebrityAge = styled.span`
   margin-left: ${(props) => props.theme.spacing(0.5)};
 `;
 
-export const CelebrityCard: React.FC<CelebrityCardProps> = ({
-  id,
-  name,
-  imageUrl,
-}) => {
-  const [age, setAge] = useState(0);
+export const CelebrityCard: React.FC<CelebrityProps> = (celebrity) => {
+  const [age, setAge] = useState<number>(0);
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const details = await fetchCelebrityDetails(id);
+        const details = await fetchCelebrityDetails(+celebrity.id);
         const calculateAge = getAge(details.biography);
         setAge(calculateAge);
       } catch (error) {
-        console.error('Erro ao buscar detalhes do filme', error);
+        console.error('Erro ao buscar detalhes da celebridade', error);
       }
     };
 
     fetchDetails();
-  }, [id]);
+  }, [celebrity.id]);
 
   return (
-    <Card>
-      <MovieImage src={imageUrl} alt={name} />
+    <Card className="celebrity">
+      <MovieImage
+        src={`https://image.tmdb.org/t/p/w500/${celebrity.profile_path}`}
+        alt={celebrity.name}
+      />
       <MovieInfo>
         <MovieTitle>
-          {name}
+          {celebrity.name}
           <CelebrityAge>{age === 0 ? 'N/A' : age}</CelebrityAge>
         </MovieTitle>
       </MovieInfo>
