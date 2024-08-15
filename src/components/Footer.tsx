@@ -6,6 +6,6 @@ const FooterContainer = styled.footer`
   color: ${(props) => props.theme.colors.textSecondary};
 `;
 
-export const Footer = () => (
-  <FooterContainer>&copy; 2024 Rater. All rights reserved</FooterContainer>
+export const Footer: React.FC = () => (
+  <FooterContainer>&copy; 2024 Rater. All rights reserved.</FooterContainer>
 );
