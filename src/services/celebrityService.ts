@@ -1,16 +1,16 @@
 import { api } from './api';
 
-export const fetchPopularCelebrities = async () => {
+export const fetchPopularCelebrities = async (page = 1) => {
   try {
     const response = await api.get('/person/popular', {
       params: {
         language: 'pt-BR',
-        page: 1,
+        page,
       },
     });
     return response.data.results;
   } catch (error) {
-    console.error('Erro ao buscar filmes populares', error);
+    console.error('Erro ao buscar celebridade', error);
     throw error;
   }
 };
@@ -24,7 +24,7 @@ export const fetchCelebrityDetails = async (celebrityId: number) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Erro ao buscar detalhes do filme', error);
+    console.error('Erro ao buscar detalhes da celebridade', error);
     throw error;
   }
 };

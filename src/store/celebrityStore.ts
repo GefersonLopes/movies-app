@@ -1,5 +1,6 @@
 import create from 'zustand';
 import { fetchPopularCelebrities } from '../services/celebrityService';
+import { usePaginationStore } from './paginationStore';
 
 export interface CelebrityProps {
   id: string;
@@ -19,7 +20,8 @@ export const useCelebrityStore = create<CelebrityStore>((set, get) => ({
   celebrities: [],
   fetchCelebrities: async () => {
     try {
-      const celebrities = await fetchPopularCelebrities();
+      const { celebrityPage } = usePaginationStore.getState();
+      const celebrities = await fetchPopularCelebrities(celebrityPage);
       set({ celebrities });
     } catch (error) {
       console.error('Erro ao buscar celebridade', error);

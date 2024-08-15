@@ -1,11 +1,15 @@
 import styled from 'styled-components';
+import { useRef } from 'react';
 import { CelebrityProps } from '../store/celebrityStore';
 import { Movie } from '../store/movieStore';
 import { MovieCard } from './MovieCard';
 import { CelebrityCard } from './CelebritiesCard';
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
+import { usePaginationStore } from '../store/paginationStore';
 
 export const SectionContainer = styled.section`
   margin: 0 ${(props) => props.theme.spacing(2)};
+  position: relative;
 `;
 
 export const SectionTitle = styled.h3`
@@ -34,6 +38,7 @@ const MoviesGrid = styled.div`
   overflow-x: auto;
   padding-bottom: ${(props) => props.theme.spacing(2)};
   flex-direction: row;
+  scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
     display: none;
@@ -75,22 +80,107 @@ const MoviesGrid = styled.div`
   }
 `;
 
+const NavigationButton = styled.button`
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+    position: absolute;
+    top: 0;
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 2;
+
+    &:hover {
+      color: ${(props) => props.theme.colors.primary};
+    }
+
+    &.left {
+      right: 3rem;
+    }
+
+    &.right {
+      right: 0;
+    }
+  }
+`;
+
 interface SectionProps {
   title?: string;
   list?: Movie[] | CelebrityProps[];
 }
 
-export const Section: React.FC<SectionProps> = ({ title, list }) => (
-  <SectionContainer>
-    {title && <SectionTitle>{title}</SectionTitle>}
-    <MoviesGrid>
-      {list?.map((item) => {
-        return 'name' in item ? (
-          <CelebrityCard key={item.id} {...(item as CelebrityProps)} />
-        ) : (
-          <MovieCard key={item.id} {...(item as Movie)} />
-        );
-      })}
-    </MoviesGrid>
-  </SectionContainer>
-);
+export const Section: React.FC<SectionProps> = ({ title, list }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const {
+    previousTopRatedMoviesPage,
+    nextTopRatedMoviesPage,
+    previousUpComingMoviesPage,
+    nextUpComingMoviesPage,
+    previousCelebrityPage,
+    nextCelebrityPage,
+  } = usePaginationStore();
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      const { scrollLeft } = scrollRef.current;
+
+      if (scrollLeft <= 0) {
+        if (title === 'Mais Populares') {
+          previousTopRatedMoviesPage();
+        } else if (title === 'Melhores Filmes') {
+          previousUpComingMoviesPage();
+        } else if (title === 'Celebridades') {
+          previousCelebrityPage();
+        }
+        return;
+      }
+
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+
+      if (scrollLeft + clientWidth >= scrollWidth) {
+        if (title === 'Mais Populares') {
+          nextTopRatedMoviesPage();
+        } else if (title === 'Melhores Filmes') {
+          nextUpComingMoviesPage();
+        } else if (title === 'Celebridades') {
+          nextCelebrityPage();
+        }
+        scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        return;
+      }
+
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <SectionContainer className={title}>
+      {title && <SectionTitle>{title}</SectionTitle>}
+      <NavigationButton className="left" onClick={scrollLeft}>
+        <MdArrowBackIos size={20} />
+      </NavigationButton>
+      <NavigationButton className="right" onClick={scrollRight}>
+        <MdArrowForwardIos size={20} />
+      </NavigationButton>
+      <MoviesGrid ref={scrollRef}>
+        {list?.map((item) => {
+          return 'name' in item ? (
+            <CelebrityCard key={item.id} {...(item as CelebrityProps)} />
+          ) : (
+            <MovieCard key={item.id} {...(item as Movie)} />
+          );
+        })}
+      </MoviesGrid>
+    </SectionContainer>
+  );
+};

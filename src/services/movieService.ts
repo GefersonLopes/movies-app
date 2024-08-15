@@ -1,11 +1,11 @@
 import { api } from './api';
 
-export const fetchPopularMovies = async () => {
+export const fetchPopularMovies = async (page = 1) => {
   try {
     const response = await api.get('/movie/popular', {
       params: {
         language: 'pt-BR',
-        page: 1,
+        page,
       },
     });
     return response.data.results;
@@ -15,12 +15,12 @@ export const fetchPopularMovies = async () => {
   }
 };
 
-export const fetchUpcomingMovies = async () => {
+export const fetchUpcomingMovies = async (page = 1) => {
   try {
     const response = await api.get('/movie/upcoming', {
       params: {
         language: 'pt-BR',
-        page: 1,
+        page,
       },
     });
     return response.data.results;
@@ -30,12 +30,12 @@ export const fetchUpcomingMovies = async () => {
   }
 };
 
-export const fetchTopRatedMovies = async () => {
+export const fetchTopRatedMovies = async (page = 1) => {
   try {
     const response = await api.get('/movie/top_rated', {
       params: {
         language: 'pt-BR',
-        page: 1,
+        page,
       },
     });
     return response.data.results;

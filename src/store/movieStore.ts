@@ -5,6 +5,7 @@ import {
   fetchUpcomingMovies,
 } from '../services/movieService';
 import { MovieDetails } from '../components/MoviePrincipalCard';
+import { usePaginationStore } from './paginationStore';
 
 export interface Movie {
   id: number;
@@ -31,10 +32,13 @@ export const useMovieStore = create<MovieStore>((set, get) => ({
   topRatedMovies: [],
   fetchMovies: async () => {
     try {
-      const [principalMovie, ...popularMovies] = await fetchPopularMovies();
+      const { popularMoviesPage, upComingMoviesPage, topRatedMoviesPage } =
+        usePaginationStore.getState();
 
-      const topRatedMovies = await fetchTopRatedMovies();
-      const upComingMovies = await fetchUpcomingMovies();
+      const [principalMovie, ...popularMovies] =
+        await fetchPopularMovies(popularMoviesPage);
+      const topRatedMovies = await fetchTopRatedMovies(topRatedMoviesPage);
+      const upComingMovies = await fetchUpcomingMovies(upComingMoviesPage);
 
       set({ principalMovie, popularMovies, topRatedMovies, upComingMovies });
     } catch (error) {
