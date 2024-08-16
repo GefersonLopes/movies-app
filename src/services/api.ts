@@ -28,13 +28,13 @@ api.interceptors.response.use(
   (response) => {
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 1500);
     return response;
   },
   (error) => {
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 1500);
     return Promise.reject(error);
   },
 );

@@ -58,3 +58,31 @@ export const fetchMovieDetails = async (movieId: number) => {
     throw error;
   }
 };
+
+export const fetchMovieSimilar = async (movieId: number) => {
+  try {
+    const response = await api.get(`/movie/${movieId}/similar`, {
+      params: {
+        language: 'pt-BR',
+      },
+    });
+    return response.data.results;
+  } catch (error) {
+    console.error('Erro ao buscar filmes similares', error);
+    throw error;
+  }
+};
+
+export const fetchMovieCredits = async (movieId: number) => {
+  try {
+    const response = await api.get(`/movie/${movieId}/credits`, {
+      params: {
+        language: 'pt-BR',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar detalhes do filme', error);
+    throw error;
+  }
+};

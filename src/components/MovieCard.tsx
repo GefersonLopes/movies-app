@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Movie } from '../store/movieStore';
+import { useNavigate } from 'react-router-dom';
 
 const defaultPoster =
   'https://via.placeholder.com/500x750.png?text=No+Image+Available';
@@ -12,6 +13,7 @@ export const Card = styled.div`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 100%;
+  cursor: pointer;
 `;
 
 export const MovieImage = styled.img`
@@ -95,22 +97,25 @@ export const WatchTrailerButton = styled.button`
   }
 `;
 
-export const MovieCard: React.FC<Movie> = (movie) => (
-  <Card className="movie">
-    <MovieImage
-      src={
-        movie.poster_path
-          ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-          : defaultPoster
-      }
-      alt={movie.title}
-    />
-    <MovieScore>
-      <StarIcon>⭐</StarIcon> {movie.vote_average?.toFixed(1) || 0}
-    </MovieScore>
-    <MovieInfo>
-      <MovieTitle>{movie.title}</MovieTitle>
-      <WatchTrailerButton>Assistir ao trailer ▶</WatchTrailerButton>
-    </MovieInfo>
-  </Card>
-);
+export const MovieCard: React.FC<Movie> = (movie) => {
+  const navigate = useNavigate();
+  return (
+    <Card className="movie" onClick={() => navigate(`/movie/${movie.id}`)}>
+      <MovieImage
+        src={
+          movie.poster_path
+            ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+            : defaultPoster
+        }
+        alt={movie.title}
+      />
+      <MovieScore>
+        <StarIcon>⭐</StarIcon> {movie.vote_average?.toFixed(1) || 0}
+      </MovieScore>
+      <MovieInfo>
+        <MovieTitle>{movie.title}</MovieTitle>
+        <WatchTrailerButton>Assistir ao trailer ▶</WatchTrailerButton>
+      </MovieInfo>
+    </Card>
+  );
+};

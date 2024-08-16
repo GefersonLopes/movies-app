@@ -6,6 +6,9 @@ import { getAge } from '../utils/calculateAge';
 import { CelebrityProps } from '../store/celebrityStore';
 import { useNavigate } from 'react-router-dom';
 
+const defaultPoster =
+  'https://via.placeholder.com/500x750.png?text=No+Image+Available';
+
 const CelebrityAge = styled.span`
   color: ${(props) => props.theme.colors.textSecondary};
   font-size: 0.7rem;
@@ -37,7 +40,11 @@ export const CelebrityCard: React.FC<CelebrityProps> = (celebrity) => {
       onClick={() => navigate(`/celebrity/${celebrity.id}`)}
     >
       <MovieImage
-        src={`https://image.tmdb.org/t/p/w500/${celebrity.profile_path}`}
+        src={
+          celebrity.profile_path
+            ? `https://image.tmdb.org/t/p/w500/${celebrity.profile_path}`
+            : defaultPoster
+        }
         alt={celebrity.name}
       />
       <MovieInfo>

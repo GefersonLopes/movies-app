@@ -54,15 +54,16 @@ const CelebrityProfile: React.FC = () => {
 
   useEffect(() => {
     const fetchCelebrity = async () => {
+      if (!id) return;
       try {
-        const celebrity = await fetchCelebrityDetails(+id!);
+        const celebrity = await fetchCelebrityDetails(+id);
         setCelebrity(celebrity);
       } catch (error) {
         console.error('Erro ao buscar detalhes da celebridade', error);
       }
     };
 
-    if (id) fetchCelebrity();
+    fetchCelebrity();
   }, [id]);
 
   const age = getAge(celebrity.birthday);

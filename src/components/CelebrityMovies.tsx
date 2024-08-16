@@ -144,8 +144,9 @@ const CelebrityMovies: React.FC = () => {
 
   useEffect(() => {
     const fetchCelebrity = async () => {
+      if (!id) return;
       try {
-        const { crew, cast } = await fetchCelebrityCombinedCredit(+id!);
+        const { crew, cast } = await fetchCelebrityCombinedCredit(+id);
         const combinedMovies = [...crew, ...cast];
         const uniqueMovies = Array.from(
           new Map(combinedMovies.map((movie) => [movie.id, movie])).values(),
@@ -156,7 +157,7 @@ const CelebrityMovies: React.FC = () => {
       }
     };
 
-    if (id) fetchCelebrity();
+    fetchCelebrity();
   }, [id]);
 
   useEffect(() => {

@@ -150,7 +150,12 @@ export const Header = () => {
 
   return (
     <HeaderContainer>
-      <img src={logo} alt="logo" />
+      <img
+        src={logo}
+        alt="logo"
+        onClick={() => (window.location.href = '/')}
+        style={{ cursor: 'pointer' }}
+      />
       <SectionInput>
         <ContainerInput>
           <SearchIcon />

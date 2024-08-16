@@ -12,6 +12,7 @@ import { Movie } from '../store/movieStore';
 import { RiFireLine } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import { fetchMovieDetails } from '../services/movieService';
+import { useNavigate } from 'react-router-dom';
 
 const defaultPoster =
   'https://via.placeholder.com/500x750.png?text=No+Image+Available';
@@ -116,6 +117,7 @@ export interface MovieDetails extends Movie {
 }
 
 export const MoviePrincipalCard: React.FC<MovieDetails> = (movie) => {
+  const navigate = useNavigate();
   const [details, setDetails] = useState({} as MovieDetails);
 
   useEffect(() => {
@@ -126,7 +128,7 @@ export const MoviePrincipalCard: React.FC<MovieDetails> = (movie) => {
   }, [movie.id]);
 
   return (
-    <Card>
+    <Card className="movie" onClick={() => navigate(`/movie/${movie.id}`)}>
       <MovieImage
         src={
           movie.poster_path
